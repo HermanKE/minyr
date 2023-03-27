@@ -3,8 +3,8 @@ package yr
 import (
 	"fmt"
 	"strconv"
-	//"strings"
-	//"errors"
+	"strings"
+	"errors"
 	"github.com/HermanKE/funtemps/conv"
 )
 
@@ -12,9 +12,9 @@ func CelsiusToFahrenheitString(celsius string) (string, error) {
 	var fahrFloat float64
 	var err error
 	if celsiusFloat, err := strconv.ParseFloat(celsius, 64); err == nil {
-		fahrFloat = conv.CelsiusToFahrenheit(celsiusFloat)
+		fahrFloat = conv.CelsiusToFarhenheit(celsiusFloat) //gramatikkfeil pga. funtemps
 	}
-	fahrString := fmt.Sprintf("%.1f", fahrFloat)
+	fahrString := fmt.Sprintf("%v", fahrFloat)
 	return fahrString, err
 }
 
