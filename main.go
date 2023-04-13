@@ -1,56 +1,86 @@
 package main
 
 import (
-	//"fmt"
+	"fmt"
 	"os"
-	"log"
+	//"log"
 	//"io"
 	//"strings"
 	"bufio"
+	"errors"
 	"github.com/HermanKE/minyr/yr"
 )
 func main() {
-	src, err := os.Open("table.csv")
-	//src, err := os.Open("kjevik-temp-celsius-20220318-20230318.csv")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer src.Close()
-	dest, err := os.OpenFile("kjevik-temp-fahr-20220318-20230318.csv", os.O_RDWR|os.O_CREATE, 0644)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer dest.Close()
-
-	lineNumber := 0
-	scanner := bufio.NewScanner(bufio.NewReader(src))
-	writer := bufio.NewWriter(dest)
-	
+	fmt.Println("Minyr er åpnet. Velg mellom 'exit/q' for å stoppe, 'convert' for å konvertere, 'average' for å finne gjennomsnittet:")
+	var input string
+	scanner := bufio.NewScanner(os.Stdin)
 	for scanner.Scan() {
-		lineNumber++
-		line := scanner.Text()
-		if lineNumber == 1 {
-			_, err = writer.WriteString(line + "\n")
-			if err != nil {
-				log.Fatal(err)
+		input = scanner.Text()
+	
+		if input == "q" || input == "exit" {
+			fmt.Println("exit")
+			os.Exit(0)
+		} else if input == "convert" {
+			fmt.Println("Konverterer alle målingene gitt i grader Celsius til grader Fahrenheit.")
+
+			if _, err := os.Stat("./kjevik-temp-fahr-20220318-20230318.csv"); err == nil {
+				fmt.Println("Filen eksisterer i systemet")
+				fmt.Println("Velg mellom: 'q/exit' for å gå ut, 'j' for å generere og konvertere ny fil, 'n' for å konvertere eksisterende fil")
+				var inputConv string
+				scannerConv := bufio.NewScanner(os.Stdin)
+				for scannerConv.Scan() {
+					inputConv = scannerConv.Text()
+
+					if inputConv == "q" || inputConv == "exit" {
+							fmt.Println("exit")
+							os.Exit(0)
+					} else if inputConv == "j" {
+						os.Remove("kjevik-temp-fahr-20220318-20230318.csv")
+						yr.ConvertCelsiusFileToFahrenheitFile()
+						yr.EditLastLine("kjevik-temp-fahr-20220318-20230318.csv")
+					} else if inputConv == "n" {
+						yr.ConvertCelsiusFileToFahrenheitFile()
+						yr.EditLastLine("kjevik-temp-fahr-20220318-20230318.csv")
+					} else {
+						fmt.Println("Venligst velg mellom 'j' for å genere en ny fil eller 'n' for å beholde eksisterende")
+					}
+				}
+			} else if errors.Is(err, os.ErrNotExist) {
+				yr.ConvertCelsiusFileToFahrenheitFile()
+				yr.EditLastLine("kjevik-temp-fahr-20220318-20230318.csv")
+				fmt.Println("Nå har du konvertert fra celsius til fahrenheit")
 			}
-			continue
-		}
-		if lineNumber == 27 {
-			_, err = writer.WriteString(line)
-			if err != nil {
-				log.Fatal(err)
+		} else if input == "average" {
+			fmt.Println("Finn ut gjennomsnittstemperaturen. Velg 'c' for å få gradene i celsius eller 'f' for å få de i fahrenheit")
+			var inputAvg string
+			scannerAvg := bufio.NewScanner(os.Stdin)
+			for scannerAvg.Scan() {
+				inputAvg = scannerAvg.Text()
+				
+				if inputAvg == "q" || inputAvg == "exit" {
+					fmt.Println("exit")
+					os.Exit(0)
+				} else if inputAvg == "c" {
+					avg, err := yr.CalculateAverageFourthElement("kjevik-temp-celsius-20220318-20230318.csv")
+					if err != nil {
+						fmt.Printf("Error: %v\n", err)
+						return
+					}
+					fmt.Printf("Average of fourth elements: %v\n", avg)
+
+				} else if inputAvg == "f" {
+					avg, err := yr.CalculateAverageFourthElement("kjevik-temp-fahr-20220318-20230318.csv")
+					if err != nil {
+						fmt.Printf("Error: %v\n", err)
+						return
+					}
+					fmt.Printf("Average of fourth elements: %v\n", avg)
+				} else if inputAvg != "c" && inputAvg != "f"{
+					fmt.Println("Venligst velg mellom 'c' eller 'f'")
+				}
 			}
-			continue
+		} else {
+			fmt.Println("Venligst velg convert, average eller exit:")
 		}
-		newLine, err := yr.CelsiusToFahrenheitLine(line)
-		_, err = writer.WriteString(newLine + "\n")
-		if err != nil {
-			log.Fatal(err)
-		}
-	}
-	err = writer.Flush()
-	if err != nil {
-		log.Fatal(err)
 	}
 }

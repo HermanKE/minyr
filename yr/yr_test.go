@@ -2,6 +2,7 @@ package yr
 
 import (
 	"testing"
+	"strings"
 )
 
 func TestCelsiusToFahrenheitString(t *testing.T) {
@@ -45,7 +46,7 @@ func TestCelsiusToFahrenheitLine(t *testing.T) {
 
 }
 
-func TestCountLines(t *testing.T) {
+func TestLineAmountOfCelsiusFile(t *testing.T) {
 	expected := 16756
 	filename := "../kjevik-temp-celsius-20220318-20230318.csv"
 	lineCount, err := CountLines(filename)
@@ -57,9 +58,9 @@ func TestCountLines(t *testing.T) {
 	}
 }
 
-func TestCalculateAverageFourthElement(t *testing.T) {
-	filePath := "../table.csv"
-	expectedAverage := 4.92
+func TestCalculateAverageFourthElementInCelsiusFile(t *testing.T) {
+	filePath := "../kjevik-temp-celsius-20220318-20230318.csv"
+	expectedAverage := 8.56
 
 	average, err := CalculateAverageFourthElement(filePath)
 	if err != nil {
@@ -69,4 +70,18 @@ func TestCalculateAverageFourthElement(t *testing.T) {
 	if average != expectedAverage {
 		t.Errorf("average %v does not match expected value %v", average, expectedAverage)
 	}
+}
+
+func TestReadLastLineContains(t *testing.T) {
+    filePath := "../table.csv"
+    expectedString := "Data er gyldig per 20.03.2023 (CC BY 4.0), Meteorologisk institutt (MET);endringen er gjort av Herman Erlingsen"
+
+    lastLine, err := ReadLastLine(filePath)
+    if err != nil {
+        t.Errorf("ReadLastLine returned an error: %v", err)
+    }
+
+    if !strings.Contains(lastLine, expectedString) {
+        t.Errorf("last line doesn't contain the expected string")
+    }
 }
