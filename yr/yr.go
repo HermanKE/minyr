@@ -69,18 +69,18 @@ func CountLines(filename string)(int, error) {
 func EditLastLine(filename string) error {
 	file, err := os.OpenFile(filename, os.O_RDWR, 0644)
     if err != nil {
-        return err
+		log.Fatal(err)
     }
     defer file.Close()
 
     buf := make([]byte, 3)
     _, err = file.Seek(-3, io.SeekEnd)
     if err != nil {
-        return err
+		log.Fatal(err)
     }
     _, err = file.Read(buf)
     if err != nil {
-        return err
+		log.Fatal(err)
     }
     if string(buf) != ";;;" {
         return errors.New("last line doesn't end with ';;;'")
@@ -88,11 +88,11 @@ func EditLastLine(filename string) error {
 
     _, err = file.Seek(-2, io.SeekEnd)
     if err != nil {
-        return err
+		log.Fatal(err)
     }
     _, err = file.Write([]byte("endringen er gjort av Herman Erlingsen"))
     if err != nil {
-        return err
+		log.Fatal(err)
     }
 
 	return nil
@@ -179,7 +179,7 @@ func ConvertCelsiusFileToFahrenheitFile() {
 			}
 			continue
 		}
-		if lineNumber == 27 {
+		if lineNumber == 16756 {
 			_, err = writer.WriteString(line)
 			if err != nil {
 				log.Fatal(err)
