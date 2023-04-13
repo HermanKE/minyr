@@ -22,12 +22,27 @@ func main() {
 	}
 	defer dest.Close()
 
-
+	lineNumber := 0
 	scanner := bufio.NewScanner(bufio.NewReader(src))
 	writer := bufio.NewWriter(dest)
 	
 	for scanner.Scan() {
+		lineNumber++
 		line := scanner.Text()
+		if lineNumber == 1 {
+			_, err = writer.WriteString(line + "\n")
+			if err != nil {
+				log.Fatal(err)
+			}
+			continue
+		}
+		if lineNumber == 27 {
+			_, err = writer.WriteString(line)
+			if err != nil {
+				log.Fatal(err)
+			}
+			continue
+		}
 		newLine, err := yr.CelsiusToFahrenheitLine(line)
 		_, err = writer.WriteString(newLine + "\n")
 		if err != nil {
