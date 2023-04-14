@@ -66,7 +66,7 @@ func main() {
 						fmt.Printf("Error: %v\n", err)
 						return
 					}
-					fmt.Printf("Average of fourth elements: %v\n", avg)
+					fmt.Printf("Gjennomsnittstemperaturen er: %v\n", avg)
 
 				} else if inputAvg == "f" {
 					avg, err := yr.CalculateAverageFourthElement("kjevik-temp-fahr-20220318-20230318.csv")
@@ -74,7 +74,7 @@ func main() {
 						fmt.Printf("Error: %v\n", err)
 						return
 					}
-					fmt.Printf("Average of fourth elements: %v\n", avg)
+					fmt.Printf("Gjennomsnittstemperaturen er: %v\n", avg)
 				} else if inputAvg != "c" && inputAvg != "f"{
 					fmt.Println("Venligst velg mellom 'c' eller 'f'")
 				}
