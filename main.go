@@ -51,7 +51,7 @@ func main() {
 				fmt.Println("Nå har du konvertert fra celsius til fahrenheit")
 			}
 		} else if input == "average" {
-			fmt.Println("Finn ut gjennomsnittstemperaturen. Velg 'c' for å få gradene i celsius eller 'f' for å få de i fahrenheit")
+			fmt.Println("Velg mellom: 'q/exit' for å gå ut, 'c' for å få gjennomsnitt i celsius eller 'f' for å få gjennomsnitt i fahrenheit")
 			var inputAvg string
 			scannerAvg := bufio.NewScanner(os.Stdin)
 			for scannerAvg.Scan() {
