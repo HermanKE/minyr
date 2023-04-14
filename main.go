@@ -38,9 +38,11 @@ func main() {
 						os.Remove("kjevik-temp-fahr-20220318-20230318.csv")
 						yr.ConvertCelsiusFileToFahrenheitFile()
 						yr.EditLastLine("kjevik-temp-fahr-20220318-20230318.csv")
+						fmt.Println("Ferdig å generere og konvertere")
 					} else if inputConv == "n" {
 						yr.ConvertCelsiusFileToFahrenheitFile()
 						yr.EditLastLine("kjevik-temp-fahr-20220318-20230318.csv")
+						fmt.Println("Ferdig å konvertere")
 					} else {
 						fmt.Println("Venligst velg mellom 'j' for å genere en ny fil eller 'n' for å beholde eksisterende")
 					}
